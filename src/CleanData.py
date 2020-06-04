@@ -31,13 +31,14 @@ def fillWithZeros(df):
 
 # Filtrer et garder uniquement les matchs datant de mars 1980 a aujourd hui
 def keepOnlyFromEightees(df):
-    return df.filter(int(df.date.replace('-', '')) > 19800300)
+    return df.filter(df.date >= '1980-03-01')
 
-def cleanData():
+def getCleanData():
     df_raw_data = readCsv()
     df_renamed_data = renameColumns(df_raw_data)
     df_selected_columns = selectColumns(df_renamed_data)
     df_without_null = fillWithZeros(df_selected_columns)
     df_clean_data = keepOnlyFromEightees(df_without_null)
 
+    df_without_null.show()
     df_clean_data.show()

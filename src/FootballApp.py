@@ -5,7 +5,7 @@ sys.setdefaultencoding('utf-8')
 from CleanData import *
 
 def main(argv):
-    cleanData()
+    df_clean_data = getCleanData()
 
 if __name__ == "__main__":
     main(sys.argv)
