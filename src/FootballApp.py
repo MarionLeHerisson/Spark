@@ -3,9 +3,11 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 from CleanData import *
+from Statistics import *
 
 def main(argv):
-    df_clean_data = getCleanData()
+    df_clean_data = getCleanData().cache()
+    showStats(df_clean_data)
 
 if __name__ == "__main__":
     main(sys.argv)

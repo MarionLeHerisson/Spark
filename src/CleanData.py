@@ -1,11 +1,10 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import lit, when
 
 # Lire le fichier csv dans une dataframe
 def readCsv():
     file = "df_matches.csv"
     spark = SparkSession.builder.getOrCreate()
-    return spark.read.csv(file, header=True)
+    return spark.read.csv(file, header=True).cache()
 
 # Renommer les colonnes :
 # - X4 : match
@@ -40,5 +39,4 @@ def getCleanData():
     df_without_null = fillWithZeros(df_selected_columns)
     df_clean_data = keepOnlyFromEightees(df_without_null)
 
-    df_without_null.show()
-    df_clean_data.show()
+    return df_clean_data
