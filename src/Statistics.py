@@ -21,11 +21,21 @@ def addDomCol(df):
 # - plus grand nombre de penalite recu par la france dans un match
 # - nombre de penalite total recu par la France moins nombre de penalite total recu par l adversaire
 def calcStats(df):
-    totalMatchs = F.count("*").over(Window.partitionBy(df.adversaire))
-    df_adversaires = df.select(df.adversaire)#.groupBy(df.adversaire).show()
-    df_stats = df_adversaires.withColumn("match_total", totalMatchs)
+    window = Window.partitionBy(df.adversaire)
+
+    avgPointsFrance = F.avg(df.score_france).over(window)
+    avgPointsAdversaire = F.avg(df.score_adversaire).over(window)
+    totalMatchs = F.count("*").over(window)
+
+    df_stats = df.withColumn("moyenne_france", avgPointsFrance)
+    df_stats = df_stats.withColumn("moyenne_adversaire", avgPointsAdversaire)
+    df_stats = df_stats.withColumn("nombre_total_matchs", totalMatchs)
+
+    df_stats.show()
 
 # ecrire le resultat dans un fichier parquet nomme stats.parquet
+def writeStats():
+    return null
 
 def showStats(df):
     df_with_dom = addDomCol(df)
