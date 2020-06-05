@@ -7,7 +7,7 @@ from Statistics import *
 
 def main(argv):
     df_clean_data = getCleanData().cache()
-    showStats(df_clean_data)
+    generateStats(df_clean_data)
 
 if __name__ == "__main__":
     main(sys.argv)
