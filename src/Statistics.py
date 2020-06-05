@@ -1,7 +1,6 @@
 import pyspark.sql.functions as F
 from pyspark.sql import SparkSession
 from pyspark.sql.types import BooleanType
-from pyspark.sql.window import Window
 
 # nouvelle colonne de type boolean indiquant pour chaque ligne si le match
 # a ete joue a domicile (true) ou pas (false)
@@ -44,5 +43,4 @@ def writeStats(df):
 def generateStats(df):
     df_with_dom = addDomCol(df)
     df_stats_full = calcStats(df_with_dom)
-    df_stats_full.show()
-#     writeStats(df_stats_full)
+    writeStats(df_stats_full)
