@@ -4,7 +4,7 @@ from pyspark.sql import SparkSession
 def readCsv():
     file = "df_matches.csv"
     spark = SparkSession.builder.getOrCreate()
-    return spark.read.csv(file, header=True).cache()
+    return spark.read.csv(file, header=True, sep=",").cache()
 
 # Renommer les colonnes :
 # - X4 : match
