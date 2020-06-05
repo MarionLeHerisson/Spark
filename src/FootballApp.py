@@ -11,14 +11,11 @@ if __name__ == "__main__":
 
 class FootballApp():
 
-    def __init__(self, argv):
-        self.main()
-
-    def main(argv):
+    def main(self, argv):
         dataCleaner = CleanData()
         statsGenerator = Statistics()
         dataJoiner = JoinData()
 
-        df_clean_data = dataCleaner.getCleanData().cache()
+        df_clean_data = dataCleaner.getCleanData(argv[1]).cache()
         statsGenerator.generateStats(df_clean_data)
         dataJoiner.joinData(df_clean_data)

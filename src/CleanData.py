@@ -2,10 +2,9 @@ from pyspark.sql import SparkSession
 
 class CleanData():
 
-    def readCsv(self):
-        file = "df_matches.csv"
+    def readCsv(self, filename):
         spark = SparkSession.builder.getOrCreate()
-        return spark.read.csv(file, header=True, sep=",").cache()
+        return spark.read.csv(filename, header=True, sep=",").cache()
 
     def renameColumns(self, df):
         return df.withColumnRenamed("X4", "match").withColumnRenamed("X6", "competition")
@@ -19,8 +18,8 @@ class CleanData():
     def keepOnlyFromEightees(self, df):
         return df.filter(df.date >= '1980-03-01')
 
-    def getCleanData(self):
-        df_raw_data = self.readCsv()
+    def getCleanData(self, filename):
+        df_raw_data = self.readCsv(filename)
         df_renamed_data = self.renameColumns(df_raw_data)
         df_selected_columns = self.selectColumns(df_renamed_data)
         df_without_null = self.fillWithZeros(df_selected_columns)
