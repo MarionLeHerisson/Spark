@@ -23,26 +23,30 @@ def addDomCol(df):
 def calcStats(df):
     window = Window.partitionBy(df.adversaire)
 
-    avgPointsFrance = F.avg(df.score_france).over(window)
-    avgPointsAdversaire = F.avg(df.score_adversaire).over(window)
-    totalMatchs = F.count("*").over(window)
-    percentDom = F.sum(df.match_domicile.cast('int')).over(window) / F.count(df.adversaire).over(window) * 100
-#     nbWorldCup = F.sum()
-    maxPenalty = F.max(df.penalty_france).over(window)
-    diffPenalty = F.sum(df.penalty_france).over(window) - F.sum(df.penalty_adversaire).over(window)
+    colAvgPointsFrance = F.avg(df.score_france).over(window)
+    colAvgPointsAdversaire = F.avg(df.score_adversaire).over(window)
+    colTotalMatchs = F.count("*").over(window)
+    colPercentDom = F.sum(df.match_domicile.cast('int')).over(window) / F.count(df.adversaire).over(window) * 100
+#   colNbWorldCup = F.sum()
+    colMaxPenalty = F.max(df.penalty_france).over(window)
+    colDiffPenalty = F.sum(df.penalty_france).over(window) - F.sum(df.penalty_adversaire).over(window)
 
-    df_stats = df.withColumn("moyenne_france", avgPointsFrance)
-    df_stats = df_stats.withColumn("moyenne_adversaire", avgPointsAdversaire)
-    df_stats = df_stats.withColumn("nombre_total_matchs", totalMatchs)
-    df_stats = df_stats.withColumn("pourcentage_domicile", percentDom)
-#     df_stats = df_stats.withColumn("nombre_cdm", nbWorldCup)
-    df_stats = df_stats.withColumn("max_penalty_france", maxPenalty)
-    df_stats = df_stats.withColumn("diff_penalty", diffPenalty)
+    df_stats = df.withColumn("moyenne_france", colAvgPointsFrance)
+    df_stats = df_stats.withColumn("moyenne_adversaire", colAvgPointsAdversaire)
+    df_stats = df_stats.withColumn("nombre_total_matchs", colTotalMatchs)
+    df_stats = df_stats.withColumn("pourcentage_domicile", colPercentDom)
+#     df_stats = df_stats.withColumn("nombre_cdm", colNbWorldCup)
+    df_stats = df_stats.withColumn("max_penalty_france", colMaxPenalty)
+    df_stats = df_stats.withColumn("diff_penalty", colDiffPenalty)
+
+    return df_stats
 
 # ecrire le resultat dans un fichier parquet nomme stats.parquet
 def writeStats(df):
-    df.write.mode('overwrite').parquet('/stats.parquet')
+    df.write.mode('overwrite').parquet('stats.parquet')
 
 def showStats(df):
     df_with_dom = addDomCol(df)
-    calcStats(df_with_dom)
+    df_stats_full = calcStats(df_with_dom)
+    df_stats_full.show()
+    writeStats(df_stats_full)
