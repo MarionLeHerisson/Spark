@@ -1,4 +1,5 @@
 # FootballApp
+Cette application permet de visualiser des statistiques sur les matchs de foot de l'équipe de France de mars 1980 à aujourd'hui.
 
 ### Installation
 Placez vous à la racine du projet et lancez `python setup.py bdist_egg`.
@@ -7,10 +8,10 @@ Placez vous à la racine du projet et lancez `python setup.py bdist_egg`.
 Vous devez avoir installé `Python 2.7.*`, `java 1.8.*`, `pyspark 2.4.*`.
 
 ### Lancement
-Placez vous à la racine du projet et lancez `spark-submit --master local --py-files dist/HelloWorld-0.1-py2.7.egg launch.py`
+Placez vous à la racine du projet et lancez `spark-submit --master local --py-files dist/FootballApp-0.1-py2.7.egg launch.py filename.csv`
 
-### Utilité
-Cette application permet de visualiser des statistiques sur les matchs de foot de l'équipe de France de mars 1980 à aujourd'hui.
+### Tests
+Lancez les tests avec `python test/TestSuite.py`.
 
 ------------
 ### Notes sur le code
