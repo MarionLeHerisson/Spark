@@ -7,11 +7,15 @@ class Statistics():
     def isDom(self, match):
         return match[0:6] == "France"
 
+    def isWorldCup(self, competition):
+        return competition[0:14] == "Coupe du monde"
+
     def addDomCol(self, df):
         is_dom_udf = F.udf(self.isDom, BooleanType())
         return df.withColumn('match_domicile', is_dom_udf(df.match))
 
     def calcStats(self, df):
+        is_world_cup_udf = F.udf(self.isWorldCup, BooleanType())
 
         df_stats = (df
             .groupBy("adversaire")
@@ -20,7 +24,7 @@ class Statistics():
                 F.avg(df.score_adversaire).alias("moyenne_adversaire"),
                 F.count("*").alias("nombre_total_matchs"),
                 (F.sum(df.match_domicile.cast('int')) / F.count(df.adversaire) * 100).alias("pourcentage_domicile"),
-    #             F.sum().alias("nombre_cdm"),
+                F.sum(is_world_cup_udf(df.competition).cast('int')).alias("nombre_cdm"),
                 F.max(df.penalty_france).alias("max_penalty_france"),
                 (F.sum(df.penalty_france) - F.sum(df.penalty_adversaire)).alias("diff_penalty")
             )

@@ -29,5 +29,3 @@ class JoinData():
         df_stats = self.readFile()
         df_join = self.joinDfAndFile(df_original, df_stats)
         self.writeFile(df_join)
-
-        df_join.show()
