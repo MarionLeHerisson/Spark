@@ -18,22 +18,26 @@ def addDomCol(df):
 # + nombre de match joue total
 # + pourcentage de match joue a domicile pour la France
 # - nombre de match joue en coupe du monde
-# - plus grand nombre de penalite recu par la france dans un match
-# - nombre de penalite total recu par la France moins nombre de penalite total recu par l adversaire
+# + plus grand nombre de penalite recu par la france dans un match
+# + nombre de penalite total recu par la France moins nombre de penalite total recu par l adversaire
 def calcStats(df):
     window = Window.partitionBy(df.adversaire)
 
     avgPointsFrance = F.avg(df.score_france).over(window)
     avgPointsAdversaire = F.avg(df.score_adversaire).over(window)
     totalMatchs = F.count("*").over(window)
-    percentDom = F.sum(df.match_domicile.cast('int')).over(window) * 100 / F.count(df.adversaire).over(window)
+    percentDom = F.sum(df.match_domicile.cast('int')).over(window) / F.count(df.adversaire).over(window) * 100
+#     nbWorldCup = F.sum()
+    maxPenalty = F.max(df.penalty_france).over(window)
+    diffPenalty = F.sum(df.penalty_france).over(window) - F.sum(df.penalty_adversaire).over(window)
 
     df_stats = df.withColumn("moyenne_france", avgPointsFrance)
     df_stats = df_stats.withColumn("moyenne_adversaire", avgPointsAdversaire)
     df_stats = df_stats.withColumn("nombre_total_matchs", totalMatchs)
     df_stats = df_stats.withColumn("pourcentage_domicile", percentDom)
-
-    df_stats.show()
+#     df_stats = df_stats.withColumn("nombre_cdm", nbWorldCup)
+    df_stats = df_stats.withColumn("max_penalty_france", maxPenalty)
+    df_stats = df_stats.withColumn("diff_penalty", diffPenalty)
 
 # ecrire le resultat dans un fichier parquet nomme stats.parquet
 def writeStats(df):
