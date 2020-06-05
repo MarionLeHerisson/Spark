@@ -20,10 +20,10 @@ class Statistics():
         df_stats = (df
             .groupBy("adversaire")
             .agg(
-                F.avg(df.score_france).alias("moyenne_france"),
-                F.avg(df.score_adversaire).alias("moyenne_adversaire"),
+                F.round(F.avg(df.score_france), 2).alias("moyenne_france"),
+                F.round(F.avg(df.score_adversaire), 2).alias("moyenne_adversaire"),
                 F.count("*").alias("nombre_total_matchs"),
-                (F.sum(df.match_domicile.cast('int')) / F.count(df.adversaire) * 100).alias("pourcentage_domicile"),
+                F.round((F.sum(df.match_domicile.cast('int')) / F.count(df.adversaire) * 100), 2).alias("pourcentage_domicile"),
                 F.sum(is_world_cup_udf(df.competition).cast('int')).alias("nombre_cdm"),
                 F.max(df.penalty_france).alias("max_penalty_france"),
                 (F.sum(df.penalty_france) - F.sum(df.penalty_adversaire)).alias("diff_penalty")

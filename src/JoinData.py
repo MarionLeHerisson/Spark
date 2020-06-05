@@ -1,6 +1,5 @@
 import pyspark.sql.functions as F
 from pyspark.sql import SparkSession
-from pyspark.sql.window import Window
 
 class JoinData():
 
