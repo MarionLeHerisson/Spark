@@ -1,4 +1,5 @@
-from src.FootballApp import main
+from src.FootballApp import FootballApp
 import sys
 
-main(sys.argv)
+football_app = FootballApp(sys.argv)
+football_app.main()
